@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 function getRandomIndex(length, currentIndex) {
 
   let randomIndex;
@@ -7,6 +7,19 @@ function getRandomIndex(length, currentIndex) {
   } while (randomIndex === currentIndex);
 
   return randomIndex;
+}
+function getIndexWithMostVotes(anecdotesArray) {
+  let maxVotes = -1;
+  let indexWithMaxVotes = -1;
+
+  anecdotesArray.forEach((anecdote, index) => {
+    if (anecdote.votes > maxVotes) {
+      maxVotes = anecdote.votes;
+      indexWithMaxVotes = index;
+    }
+  });
+
+  return indexWithMaxVotes;
 }
 
 const anecdotesArray = [
@@ -23,6 +36,7 @@ const App = () => {
 
   const [anecdotes, setAnecdotes] = useState(anecdotesArray)
   const [selected, setSelected] = useState(0)
+  const [indexWithMostVotes, setIndexWithMostVotes] = useState(null)
 
   const getNextAnecdote = () => {
     console.log(anecdotes)
@@ -35,8 +49,15 @@ const App = () => {
     setAnecdotes(anecdotesCopy)
   }
 
+  useEffect(() => {
+    const mostVotesIndex = getIndexWithMostVotes(anecdotes)
+    console.log("🚀 ~ file: App.jsx:54 ~ useEffect ~ mostVotesIndex:", mostVotesIndex)
+    setIndexWithMostVotes(mostVotesIndex)
+  }, [anecdotes])
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>
         {anecdotes[selected].quote}
       </p>
@@ -44,6 +65,15 @@ const App = () => {
       <p>
         <button onClick={voteOnAnecdote}>vote</button>
         <button onClick={getNextAnecdote}>next anecdote</button></p>
+      <h1>Anecdote with the most votes</h1>
+      {
+        indexWithMostVotes && <div>
+          <p>
+            {anecdotes[indexWithMostVotes].quote}
+          </p>
+          <p>has {anecdotes[indexWithMostVotes].votes} votes</p>
+        </div>
+      }
     </div>
   )
 }
