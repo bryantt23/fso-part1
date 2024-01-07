@@ -36,7 +36,7 @@ const App = () => {
 
   const [anecdotes, setAnecdotes] = useState(anecdotesArray)
   const [selected, setSelected] = useState(0)
-  const [indexWithMostVotes, setIndexWithMostVotes] = useState(null)
+  const [indexWithMostVotes, setIndexWithMostVotes] = useState(getIndexWithMostVotes(anecdotes))
 
   const getNextAnecdote = () => {
     console.log(anecdotes)
@@ -66,14 +66,10 @@ const App = () => {
         <button onClick={voteOnAnecdote}>vote</button>
         <button onClick={getNextAnecdote}>next anecdote</button></p>
       <h1>Anecdote with the most votes</h1>
-      {
-        indexWithMostVotes && <div>
-          <p>
-            {anecdotes[indexWithMostVotes].quote}
-          </p>
-          <p>has {anecdotes[indexWithMostVotes].votes} votes</p>
-        </div>
-      }
+      <p>
+        {anecdotes[indexWithMostVotes].quote}
+      </p>
+      <p>has {anecdotes[indexWithMostVotes].votes} votes</p>
     </div>
   )
 }
