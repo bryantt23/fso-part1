@@ -19,8 +19,8 @@ const Statistics = ({ good, bad, neutral }) => {
   </div>
 }
 
-const Button = ({ text, cb, cur }) => {
-  return <button onClick={() => cb(cur + 1)}>{text}</button>
+const Button = ({ text, cb }) => {
+  return <button onClick={cb}> {text}</button>
 }
 
 const App = () => {
@@ -32,9 +32,9 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <Button text="good" cb={setGood} cur={good} />
-      <Button text="neutral" cb={setNeutral} cur={neutral} />
-      <Button text="bad" cb={setBad} cur={bad} />
+      <Button text="good" cb={() => setGood(good + 1)} />
+      <Button text="neutral" cb={() => setNeutral(neutral + 1)} />
+      <Button text="bad" cb={() => setBad(bad + 1)} />
       <Statistics good={good} bad={bad} neutral={neutral} />
     </div>
   )
