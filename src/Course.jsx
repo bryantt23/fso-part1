@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Course({ part, exercises }) {
+function Course({ part: { name, exercises } }) {
     return (
         <p>
-            {part} {exercises}
+            {name} {exercises}
         </p>
     )
 }
