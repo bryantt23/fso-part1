@@ -13,7 +13,7 @@ function Course({ course: { name, parts } }) {
             <p>
                 <strong>total of {parts.reduce((prev, cur) => {
                     return prev + cur.exercises
-                }, 0)}</strong>
+                }, 0)} exercises</strong>
             </p>
         </div>
     )
