@@ -1,10 +1,17 @@
 import React from 'react'
 
-function Course({ part: { name, exercises } }) {
+function Course({ course: { name, parts } }) {
     return (
-        <p>
-            {name} {exercises}
-        </p>
+        <div>
+            <h1>
+                {name}
+            </h1>
+
+            <p>
+                {parts.map(({ name, exercises, id }) => <p key={id}>{name} {exercises}</p>)}
+
+            </p>
+        </div>
     )
 }
 
