@@ -2,12 +2,17 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
+    { name: '' },
     { name: 'Arto Hellas' }
   ])
   const [newName, setNewName] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (persons.some(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
     setPersons(persons => persons.concat({ name: newName }))
     setNewName("")
   }
