@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './Filter'
+import PersonForm from './PersonForm'
+import Persons from './Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -7,42 +10,25 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
-  const [newName, setNewName] = useState('')
-  const [newTelephoneNumber, setTelephoneNumber] = useState('')
   const [nameSearch, setNameSearch] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+  const handleSubmit = (name, number) => {
+    if (persons.some(person => person.name === name)) {
+      alert(`${name} is already added to phonebook`)
       return
     }
-    setPersons(persons => persons.concat({ name: newName, number: newTelephoneNumber }))
-    setNewName("")
-    setTelephoneNumber("")
+    setPersons(persons => persons.concat({ name, number }))
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input type="text" value={nameSearch} onChange={e => setNameSearch(e.target.value)} />
-      </div>
+      <Filter nameSearch={nameSearch} setNameSearch={setNameSearch} />
       <h2>add a new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input type="text" value={newName} onChange={e => setNewName(e.target.value)} />
-        </div>
-        <div>
-          number: <input type="tel" value={newTelephoneNumber} onChange={e => setTelephoneNumber(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm handleSubmit={handleSubmit} />
+
       <h2>Numbers</h2>
-      <ul>
-        {persons.filter(person => person.name.toLowerCase().includes(nameSearch)).map(person => <li>{person.name} {person.number}</li>)}</ul>
+      <Persons persons={persons} nameSearch={nameSearch} />
     </div>
   )
 }
