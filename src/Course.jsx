@@ -9,6 +9,11 @@ function Course({ course: { name, parts } }) {
 
             <p>
                 {parts.map(({ name, exercises, id }) => <p key={id}>{name} {exercises}</p>)}
+            </p>
+            <p>
+                <strong>total of {parts.reduce((prev, cur) => {
+                    return prev + cur.exercises
+                }, 0)}</strong>
 
             </p>
         </div>
