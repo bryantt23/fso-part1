@@ -3,6 +3,7 @@ import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
 import axios from 'axios'
+import { getAll, create } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -10,8 +11,7 @@ const App = () => {
   const [nameSearch, setNameSearch] = useState('')
   useEffect(() => {
     async function fetch() {
-      const res = await axios.get("http://localhost:3001/persons")
-      console.log("🚀 ~ fetch ~ res:", res)
+      const res = await getAll()
       setPersons(res.data)
     }
     fetch()
@@ -21,7 +21,7 @@ const App = () => {
       alert(`${name} is already added to phonebook`)
       return
     }
-    await axios.post("http://localhost:3001/persons", { name, number })
+    await create({ name, number })
     setPersons(persons => persons.concat({ name, number }))
   }
 
