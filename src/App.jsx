@@ -5,7 +5,6 @@ import Persons from './Persons'
 import axios from 'axios'
 
 const App = () => {
-
   const [persons, setPersons] = useState([
   ])
   const [nameSearch, setNameSearch] = useState('')
@@ -17,11 +16,12 @@ const App = () => {
     }
     fetch()
   }, [])
-  const handleSubmit = (name, number) => {
+  const handleSubmit = async (name, number) => {
     if (persons.some(person => person.name === name)) {
       alert(`${name} is already added to phonebook`)
       return
     }
+    await axios.post("http://localhost:3001/persons", { name, number })
     setPersons(persons => persons.concat({ name, number }))
   }
 
