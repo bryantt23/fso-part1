@@ -8,3 +8,8 @@ export const getAll = () => {
 export const create = newObject => {
   return axios.post(baseUrl, newObject);
 };
+
+export const deletePerson = id => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+

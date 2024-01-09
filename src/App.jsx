@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
-import axios from 'axios'
 import { getAll, create } from './services/persons'
 
 const App = () => {
