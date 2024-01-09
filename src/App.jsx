@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
-import { getAll, create } from './services/persons'
+import { getAll, create, deletePerson } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
   ])
   const [nameSearch, setNameSearch] = useState('')
+  async function fetchPersons() {
+    const res = await getAll()
+    setPersons(res.data)
+  }
   useEffect(() => {
-    async function fetch() {
-      const res = await getAll()
-      setPersons(res.data)
-    }
-    fetch()
+    fetchPersons()
   }, [])
   const handleSubmit = async (name, number) => {
     if (persons.some(person => person.name === name)) {
@@ -21,7 +21,13 @@ const App = () => {
       return
     }
     await create({ name, number })
-    setPersons(persons => persons.concat({ name, number }))
+    await fetchPersons()
+  }
+  const handleDelete = async (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      await deletePerson(person.id)
+      await fetchPersons()
+    }
   }
 
   return (
@@ -32,7 +38,7 @@ const App = () => {
       <PersonForm handleSubmit={handleSubmit} />
 
       <h2>Numbers</h2>
-      <Persons persons={persons} nameSearch={nameSearch} />
+      <Persons persons={persons} nameSearch={nameSearch} handleDelete={handleDelete} />
     </div>
   )
 }
