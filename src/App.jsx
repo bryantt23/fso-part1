@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
-import { getAll, create, deletePerson } from './services/persons'
+import { getAll, create, deletePerson, updatePerson } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -16,8 +16,12 @@ const App = () => {
     fetchPersons()
   }, [])
   const handleSubmit = async (name, number) => {
-    if (persons.some(person => person.name === name)) {
-      alert(`${name} is already added to phonebook`)
+    const matchingPerson = persons.find(person => person.name === name)
+    if (matchingPerson) {
+      if (window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`)) {
+        await updatePerson(matchingPerson.id, { name, number })
+        await fetchPersons()
+      }
       return
     }
     await create({ name, number })

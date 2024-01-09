@@ -13,3 +13,6 @@ export const deletePerson = id => {
   return axios.delete(`${baseUrl}/${id}`);
 };
 
+export const updatePerson = (id, updatedObject )=> {
+  return axios.put(`${baseUrl}/${id}`, updatedObject);
+};
