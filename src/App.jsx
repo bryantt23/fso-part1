@@ -10,30 +10,36 @@ const App = () => {
   ])
   const [notification, setNotification] = useState(null)
   const [nameSearch, setNameSearch] = useState('')
-  async function fetchPersons() {
-    const res = await getAll()
-    setPersons(res.data)
-  }
   useEffect(() => {
     fetchPersons()
   }, [])
+
+  const fetchPersons = async () => {
+    const res = await getAll()
+    setPersons(res.data)
+  }
+
+  const sendNotification = (notification) => {
+    setNotification(notification)
+    setTimeout(() => { setNotification(null) }, 3000)
+  }
+
   const handleSubmit = async (name, number) => {
     const matchingPerson = persons.find(person => person.name === name)
     if (matchingPerson) {
       if (window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`)) {
         try {
           await updatePerson(matchingPerson.id, { name, number })
-          setNotification({ message: `Updated ${name}`, type: "success" })
+          sendNotification({ message: `Updated ${name}`, type: "success" })
         } catch (error) {
-          setNotification({ message: `Information of ${name} has already been removed from server`, type: "error" })
+          sendNotification({ message: `Information of ${name} has already been removed from server`, type: "error" })
         }
         await fetchPersons()
       }
       return
     }
     await create({ name, number })
-    setNotification({ message: `Added ${name}`, type: "success" })
-    setTimeout(() => { setNotification(null) }, 3000)
+    sendNotification({ message: `Added ${name}`, type: "success" })
     await fetchPersons()
   }
   const handleDelete = async (person) => {
