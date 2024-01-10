@@ -8,7 +8,7 @@ import { getAll, create, deletePerson, updatePerson } from './services/persons'
 const App = () => {
   const [persons, setPersons] = useState([
   ])
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [nameSearch, setNameSearch] = useState('')
   async function fetchPersons() {
     const res = await getAll()
@@ -27,8 +27,8 @@ const App = () => {
       return
     }
     await create({ name, number })
-    setNotificationMessage(`Added ${name}`)
-    setTimeout(() => { setNotificationMessage(null) }, 3000)
+    setNotification({ message: `Added ${name}`, type: "success" })
+    setTimeout(() => { setNotification(null) }, 3000)
     await fetchPersons()
   }
   const handleDelete = async (person) => {
@@ -41,7 +41,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification notification={notification} />
       <Filter nameSearch={nameSearch} setNameSearch={setNameSearch} />
       <h2>add a new</h2>
       <PersonForm handleSubmit={handleSubmit} />
