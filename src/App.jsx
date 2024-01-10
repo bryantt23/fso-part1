@@ -28,7 +28,7 @@ const App = () => {
     }
     await create({ name, number })
     setNotificationMessage(`Added ${name}`)
-    setTimeout(() => { setNotificationMessage(null) }, 2000)
+    setTimeout(() => { setNotificationMessage(null) }, 3000)
     await fetchPersons()
   }
   const handleDelete = async (person) => {
