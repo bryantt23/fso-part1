@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
+import Notification from './Notification'
 import { getAll, create, deletePerson, updatePerson } from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
   ])
+  const [notificationMessage, setNotificationMessage] = useState(null)
   const [nameSearch, setNameSearch] = useState('')
   async function fetchPersons() {
     const res = await getAll()
@@ -25,6 +27,8 @@ const App = () => {
       return
     }
     await create({ name, number })
+    setNotificationMessage(`Added ${name}`)
+    setTimeout(() => { setNotificationMessage(null) }, 2000)
     await fetchPersons()
   }
   const handleDelete = async (person) => {
@@ -37,6 +41,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter nameSearch={nameSearch} setNameSearch={setNameSearch} />
       <h2>add a new</h2>
       <PersonForm handleSubmit={handleSubmit} />
