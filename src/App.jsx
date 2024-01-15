@@ -29,7 +29,7 @@ const App = () => {
     if (matchingPerson) {
       if (window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`)) {
         try {
-          await updatePerson(matchingPerson.id, { name, number })
+          await updatePerson(matchingPerson._id, { name, number })
           sendNotification({ message: `Updated ${name}`, type: "success" })
         } catch (error) {
           sendNotification({ message: `Information of ${name} has already been removed from server`, type: "error" })
@@ -38,8 +38,20 @@ const App = () => {
       }
       return
     }
-    await create({ name, number })
-    sendNotification({ message: `Added ${name}`, type: "success" })
+    try {
+      await create({ name, number });
+      sendNotification({ message: `Added ${name}`, type: "success" });
+    } catch (error) {
+      // Assuming the error response is in JSON format
+      if (error.response && error.response.data) {
+        // Extracting the error message from the server response
+        const errorMessage = error.response.data.error || 'An unexpected error occurred';
+        sendNotification({ message: errorMessage, type: "error" });
+      } else {
+        // Fallback error message if response data isn't available
+        sendNotification({ message: 'An unexpected error occurred', type: "error" });
+      }
+    }
     await fetchPersons()
   }
   const handleDelete = async (person) => {
