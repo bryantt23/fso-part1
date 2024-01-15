@@ -24,6 +24,18 @@ const App = () => {
     setTimeout(() => { setNotification(null) }, 3000)
   }
 
+  const errorHandler = (error) => {
+    // Assuming the error response is in JSON format
+    if (error.response && error.response.data) {
+      // Extracting the error message from the server response
+      const errorMessage = error.response.data.error || 'An unexpected error occurred';
+      sendNotification({ message: errorMessage, type: "error" });
+    } else {
+      // Fallback error message if response data isn't available
+      sendNotification({ message: 'An unexpected error occurred', type: "error" });
+    }
+  }
+
   const handleSubmit = async (name, number) => {
     const matchingPerson = persons.find(person => person.name === name)
     if (matchingPerson) {
@@ -32,7 +44,8 @@ const App = () => {
           await updatePerson(matchingPerson._id, { name, number })
           sendNotification({ message: `Updated ${name}`, type: "success" })
         } catch (error) {
-          sendNotification({ message: `Information of ${name} has already been removed from server`, type: "error" })
+          console.log("🚀 ~ handleSubmit ~ error:", error)
+          errorHandler(error)
         }
         await fetchPersons()
       }
@@ -42,21 +55,13 @@ const App = () => {
       await create({ name, number });
       sendNotification({ message: `Added ${name}`, type: "success" });
     } catch (error) {
-      // Assuming the error response is in JSON format
-      if (error.response && error.response.data) {
-        // Extracting the error message from the server response
-        const errorMessage = error.response.data.error || 'An unexpected error occurred';
-        sendNotification({ message: errorMessage, type: "error" });
-      } else {
-        // Fallback error message if response data isn't available
-        sendNotification({ message: 'An unexpected error occurred', type: "error" });
-      }
+      errorHandler(error)
     }
     await fetchPersons()
   }
   const handleDelete = async (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      await deletePerson(person.id)
+      await deletePerson(person._id)
       await fetchPersons()
     }
   }
